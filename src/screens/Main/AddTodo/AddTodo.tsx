@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import axios from 'axios';
-import { TodoItem } from '../../types/common';
+import { TodoItem } from '../../../types/common';
 
 interface Props {
   onAdd: (todo: TodoItem) => void;

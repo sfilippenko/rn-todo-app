@@ -7,7 +7,7 @@ const NavBar: React.FC = () => {
   return (
     <View style={[styles.navbarContainer, { paddingTop: top }]}>
       <View style={styles.navbar}>
-        <Text style={styles.text}>ToDo App</Text>
+        <Text style={styles.text}>Todo App</Text>
       </View>
     </View>
   );

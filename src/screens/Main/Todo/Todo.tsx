@@ -2,12 +2,13 @@ import React from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { TodoItem } from '../../types/common';
+import { TodoItem } from '../../../types/common';
 
 interface Props {
   data: TodoItem;
   isLast?: boolean;
   onDelete: (id: number) => void;
+  onTodoOpen: (value: number | null) => void;
 }
 
 const activeOpacity = 0.3;
@@ -15,7 +16,7 @@ const activeOpacity = 0.3;
 const Todo: React.FC<Props> = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [loading, setLoading] = React.useState(false);
-  const { data, isLast, onDelete } = props;
+  const { data, isLast, onDelete, onTodoOpen } = props;
   const { title, id } = data;
 
   const handleDelete = React.useCallback(async () => {
@@ -49,9 +50,14 @@ const Todo: React.FC<Props> = (props) => {
     );
   }, [handleDelete, showActionSheetWithOptions]);
 
+  const handlePress = React.useCallback(() => {
+    onTodoOpen(id);
+  }, [id, onTodoOpen]);
+
   return (
     <TouchableOpacity
       activeOpacity={activeOpacity}
+      onPress={handlePress}
       onLongPress={handleLongPress}
       style={[styles.todo, isLast && styles.todoLast, loading && styles.todoLoading]}
       disabled={loading}>

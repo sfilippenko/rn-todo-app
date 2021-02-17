@@ -1,16 +1,15 @@
-import { StyleSheet, View, ActivityIndicator, FlatList, ListRenderItemInfo } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React from 'react';
 import axios from 'axios';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NavBar from './components/Navbar';
-import AddTodo from './components/AddTodo';
-import Todo from './components/Todo';
 import { TodoItem } from './types/common';
+import Main from './screens/Main';
+import Todo from './screens/Todo';
 
 const Root: React.FC = () => {
+  const [todoId, setTodoId] = React.useState<number | null>(2);
   const [todos, setTodos] = React.useState<TodoItem[]>([]);
   const [loading, setLoading] = React.useState(false);
-  const insets = useSafeAreaInsets();
 
   React.useEffect(() => {
     (async () => {
@@ -37,38 +36,25 @@ const Root: React.FC = () => {
     });
   }, []);
 
-  const renderItem = React.useCallback(
-    (info: ListRenderItemInfo<TodoItem>) => {
-      return (
-        <Todo data={info.item} isLast={info.index === todos.length - 1} onDelete={handleDelete} />
-      );
-    },
-    [todos, handleDelete],
-  );
-
-  const keyExtractor = React.useCallback((item: TodoItem) => {
-    return String(item.id);
-  }, []);
+  const renderContent = () => {
+    if (todoId !== null) {
+      return <Todo onTodoOpen={setTodoId} todo={todos.find((item) => item.id === todoId)} />;
+    }
+    return (
+      <Main
+        onTodoOpen={setTodoId}
+        onAdd={handleAdd}
+        onDelete={handleDelete}
+        todos={todos}
+        loading={loading}
+      />
+    );
+  };
 
   return (
     <View style={styles.container}>
       <NavBar />
-      <View style={styles.content}>
-        {loading ? (
-          <ActivityIndicator size="large" />
-        ) : (
-          <>
-            <AddTodo onAdd={handleAdd} />
-            <FlatList<TodoItem>
-              contentContainerStyle={{ paddingBottom: insets.bottom }}
-              data={todos}
-              renderItem={renderItem}
-              showsVerticalScrollIndicator={false}
-              keyExtractor={keyExtractor}
-            />
-          </>
-        )}
-      </View>
+      <View style={styles.content}>{renderContent()}</View>
     </View>
   );
 };
