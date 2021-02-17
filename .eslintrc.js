@@ -64,6 +64,8 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    'no-shadow': 0,
+    'import/prefer-default-export': 1,
     'react/prop-types': 0,
     'no-unused-vars': 0,
     'no-use-before-define': 0,

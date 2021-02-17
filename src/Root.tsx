@@ -38,7 +38,13 @@ const Root: React.FC = () => {
 
   const renderContent = () => {
     if (todoId !== null) {
-      return <Todo onTodoOpen={setTodoId} todo={todos.find((item) => item.id === todoId)} />;
+      return (
+        <Todo
+          onDelete={handleDelete}
+          onTodoOpen={setTodoId}
+          todo={todos.find((item) => item.id === todoId)}
+        />
+      );
     }
     return (
       <Main

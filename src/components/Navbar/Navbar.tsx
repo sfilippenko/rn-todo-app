@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Colors } from '../../consts/theme';
 
 const NavBar: React.FC = () => {
   const { top } = useSafeAreaInsets();
@@ -15,13 +16,13 @@ const NavBar: React.FC = () => {
 
 const styles = StyleSheet.create({
   navbarContainer: {
-    backgroundColor: '#3949ab',
+    backgroundColor: Colors.Main,
   },
   navbar: {
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#3949ab',
+    backgroundColor: Colors.Main,
   },
   text: {
     color: '#fff',

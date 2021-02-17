@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import axios from 'axios';
 import { TodoItem } from '../../../types/common';
+import { Colors } from '../../../consts/theme';
 
 interface Props {
   onAdd: (todo: TodoItem) => void;
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderBottomWidth: 2,
     borderStyle: 'solid',
-    borderBottomColor: '#3949ab',
+    borderBottomColor: Colors.Main,
     marginRight: 10,
   },
 });
