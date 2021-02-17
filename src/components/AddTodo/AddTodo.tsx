@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TextInput, Button } from 'react-native';
+import { View, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import axios from 'axios';
 import { TodoItem } from '../../types/common';
 
@@ -16,27 +16,39 @@ const AddTodo: React.FC<Props> = (props) => {
     setTitle(text);
   }, []);
 
+  const trimmedTitle = React.useMemo(() => {
+    return title.trim();
+  }, [title]);
+
   const handlePress = React.useCallback(async () => {
     setLoading(true);
-    await new Promise((res) => setTimeout(res, 1000));
+    await new Promise((res) => setTimeout(res, 500));
     try {
+      if (!trimmedTitle) {
+        throw new Error('Название дела не может быть пустым');
+      }
       const response = await axios.post('https://jsonplaceholder.typicode.com/todos', {
-        title,
+        title: trimmedTitle,
       });
       addTodo(response.data);
       setTitle('');
+    } catch (e) {
+      Alert.alert(e.message);
     } finally {
       setLoading(false);
     }
-  }, [addTodo, title]);
+  }, [addTodo, trimmedTitle]);
 
   return (
     <View style={styles.block}>
       <TextInput
+        autoCorrect={false}
+        autoCapitalize="none"
         style={styles.input}
         editable={!loading}
         onChangeText={handleTitleChange}
         value={title}
+        placeholder="Введите название дела..."
       />
       <Button title="Добавить" onPress={handlePress} disabled={loading} />
     </View>
@@ -47,6 +59,7 @@ const styles = StyleSheet.create({
   block: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 16,
   },
   input: {
     padding: 10,
