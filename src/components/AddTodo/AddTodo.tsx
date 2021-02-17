@@ -4,11 +4,11 @@ import axios from 'axios';
 import { TodoItem } from '../../types/common';
 
 interface Props {
-  addTodo: (todo: TodoItem) => void;
+  onAdd: (todo: TodoItem) => void;
 }
 
 const AddTodo: React.FC<Props> = (props) => {
-  const { addTodo } = props;
+  const { onAdd } = props;
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState('');
 
@@ -30,14 +30,14 @@ const AddTodo: React.FC<Props> = (props) => {
       const response = await axios.post('https://jsonplaceholder.typicode.com/todos', {
         title: trimmedTitle,
       });
-      addTodo(response.data);
+      onAdd(response.data);
       setTitle('');
     } catch (e) {
       Alert.alert(e.message);
     } finally {
       setLoading(false);
     }
-  }, [addTodo, trimmedTitle]);
+  }, [onAdd, trimmedTitle]);
 
   return (
     <View style={styles.block}>
@@ -48,7 +48,7 @@ const AddTodo: React.FC<Props> = (props) => {
         editable={!loading}
         onChangeText={handleTitleChange}
         value={title}
-        placeholder="Введите название дела..."
+        placeholder="Введите название задания..."
       />
       <Button title="Добавить" onPress={handlePress} disabled={loading} />
     </View>

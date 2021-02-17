@@ -1,19 +1,59 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import axios from 'axios';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import { TodoItem } from '../../types/common';
 
 interface Props {
   data: TodoItem;
   isLast?: boolean;
+  onDelete: (id: number) => void;
 }
 
 const Todo: React.FC<Props> = (props) => {
-  const { data, isLast } = props;
-  const { title } = data;
+  const { showActionSheetWithOptions } = useActionSheet();
+  const [loading, setLoading] = React.useState(false);
+  const { data, isLast, onDelete } = props;
+  const { title, id } = data;
+
+  const handleDelete = React.useCallback(async () => {
+    setLoading(true);
+    await new Promise((res) => setTimeout(res, 500));
+    try {
+      await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`);
+      onDelete(id);
+    } catch (e) {
+      setLoading(false);
+    }
+  }, [id, onDelete]);
+
+  const handleLongPress = React.useCallback(() => {
+    showActionSheetWithOptions(
+      {
+        options: ['Удалить', 'Отмена'],
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0: {
+            handleDelete();
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+      },
+    );
+  }, [handleDelete, showActionSheetWithOptions]);
+
   return (
-    <View style={[styles.todo, isLast && styles.todoLast]}>
+    <TouchableOpacity
+      onLongPress={handleLongPress}
+      style={[styles.todo, isLast && styles.todoLast, loading && styles.todoLoading]}
+      disabled={loading}>
       <Text>{title}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -29,6 +69,9 @@ const styles = StyleSheet.create({
   },
   todoLast: {
     marginBottom: 0,
+  },
+  todoLoading: {
+    opacity: 0.3,
   },
 });
 

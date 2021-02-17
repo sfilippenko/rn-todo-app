@@ -25,17 +25,25 @@ const Root: React.FC = () => {
     })();
   }, []);
 
-  const addTodo = React.useCallback((todo: TodoItem) => {
+  const handleAdd = React.useCallback((todo: TodoItem) => {
     setTodos((prevTodos) => {
       return [...prevTodos, { ...todo, id: todo.id + Date.now() }];
     });
   }, []);
 
+  const handleDelete = React.useCallback((id: number) => {
+    setTodos((prevTodos) => {
+      return prevTodos.filter((item) => item.id !== id);
+    });
+  }, []);
+
   const renderItem = React.useCallback(
     (info: ListRenderItemInfo<TodoItem>) => {
-      return <Todo data={info.item} isLast={info.index === todos.length - 1} />;
+      return (
+        <Todo data={info.item} isLast={info.index === todos.length - 1} onDelete={handleDelete} />
+      );
     },
-    [todos],
+    [todos, handleDelete],
   );
 
   const keyExtractor = React.useCallback((item: TodoItem) => {
@@ -45,13 +53,14 @@ const Root: React.FC = () => {
   return (
     <View style={styles.container}>
       <NavBar />
-      <View style={[styles.content, { paddingBottom: insets.bottom }]}>
+      <View style={styles.content}>
         {loading ? (
           <ActivityIndicator size="large" />
         ) : (
           <>
-            <AddTodo addTodo={addTodo} />
+            <AddTodo onAdd={handleAdd} />
             <FlatList<TodoItem>
+              contentContainerStyle={{ paddingBottom: insets.bottom }}
               data={todos}
               renderItem={renderItem}
               showsVerticalScrollIndicator={false}
@@ -69,7 +78,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingVertical: 20,
+    paddingHorizontal: 16,
     paddingTop: 20,
     flex: 1,
   },
