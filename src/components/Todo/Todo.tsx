@@ -10,6 +10,8 @@ interface Props {
   onDelete: (id: number) => void;
 }
 
+const activeOpacity = 0.3;
+
 const Todo: React.FC<Props> = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [loading, setLoading] = React.useState(false);
@@ -49,6 +51,7 @@ const Todo: React.FC<Props> = (props) => {
 
   return (
     <TouchableOpacity
+      activeOpacity={activeOpacity}
       onLongPress={handleLongPress}
       style={[styles.todo, isLast && styles.todoLast, loading && styles.todoLoading]}
       disabled={loading}>
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   todoLoading: {
-    opacity: 0.3,
+    opacity: activeOpacity,
   },
 });
 
