@@ -7,7 +7,7 @@ import Main from './screens/Main';
 import Todo from './screens/Todo';
 
 const Root: React.FC = () => {
-  const [todoId, setTodoId] = React.useState<number | null>(2);
+  const [todoId, setTodoId] = React.useState<number | null>(null);
   const [todos, setTodos] = React.useState<TodoItem[]>([]);
   const [loading, setLoading] = React.useState(false);
 
@@ -16,7 +16,7 @@ const Root: React.FC = () => {
       setLoading(true);
       await new Promise((res) => setTimeout(res, 500));
       try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=40');
+        const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=25');
         setTodos(response.data);
       } finally {
         setLoading(false);
@@ -30,6 +30,17 @@ const Root: React.FC = () => {
     });
   }, []);
 
+  const handleChange = React.useCallback((todo: TodoItem) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map((item) => {
+        if (item.id === todo.id) {
+          return todo;
+        }
+        return item;
+      });
+    });
+  }, []);
+
   const handleDelete = React.useCallback((id: number) => {
     setTodos((prevTodos) => {
       return prevTodos.filter((item) => item.id !== id);
@@ -40,6 +51,7 @@ const Root: React.FC = () => {
     if (todoId !== null) {
       return (
         <Todo
+          onTodoChange={handleChange}
           onDelete={handleDelete}
           onTodoOpen={setTodoId}
           todo={todos.find((item) => item.id === todoId)}

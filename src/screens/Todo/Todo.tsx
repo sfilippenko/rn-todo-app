@@ -4,16 +4,19 @@ import axios from 'axios';
 import { TodoItem } from '../../types/common';
 import { Colors } from '../../consts/theme';
 import Card from '../../components/Card';
+import EditModal from './EditModal';
 
 interface Props {
   onTodoOpen: (value: number | null) => void;
   todo?: TodoItem;
   onDelete: (id: number) => void;
+  onTodoChange: (todo: TodoItem) => void;
 }
 
 const Todo: React.FC<Props> = (props) => {
-  const { onTodoOpen, todo, onDelete } = props;
+  const { onTodoOpen, todo, onDelete, onTodoChange } = props;
   const [loading, setLoading] = React.useState(false);
+  const [modal, setModal] = React.useState(false);
 
   const handleBackPress = React.useCallback(() => {
     onTodoOpen(null);
@@ -51,6 +54,14 @@ const Todo: React.FC<Props> = (props) => {
     ]);
   }, [handleDelete, todo]);
 
+  const openModal = React.useCallback(() => {
+    setModal(true);
+  }, []);
+
+  const closeModal = React.useCallback(() => {
+    setModal(false);
+  }, []);
+
   if (!todo) {
     return null;
   }
@@ -61,7 +72,7 @@ const Todo: React.FC<Props> = (props) => {
     <View>
       <Card style={styles.card}>
         <Text style={styles.title}>{title}</Text>
-        <Button disabled={loading} title="Редактировать" onPress={handleDeletePress} />
+        <Button disabled={loading} title="Редактировать" onPress={openModal} />
       </Card>
       <View style={styles.buttons}>
         <View style={styles.button}>
@@ -76,6 +87,9 @@ const Todo: React.FC<Props> = (props) => {
           />
         </View>
       </View>
+      {modal && (
+        <EditModal visible={modal} onClose={closeModal} todo={todo} onTodoChange={onTodoChange} />
+      )}
     </View>
   );
 };

@@ -13,10 +13,6 @@ const AddTodo: React.FC<Props> = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState('');
 
-  const handleTitleChange = React.useCallback((text: string) => {
-    setTitle(text);
-  }, []);
-
   const trimmedTitle = React.useMemo(() => {
     return title.trim();
   }, [title]);
@@ -47,7 +43,7 @@ const AddTodo: React.FC<Props> = (props) => {
         autoCapitalize="none"
         style={styles.input}
         editable={!loading}
-        onChangeText={handleTitleChange}
+        onChangeText={setTitle}
         value={title}
         placeholder="Введите название задания..."
       />
