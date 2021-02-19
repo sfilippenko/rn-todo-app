@@ -1,5 +1,13 @@
 import React from 'react';
-import { ActivityIndicator, FlatList, ListRenderItemInfo } from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  FlatList,
+  ListRenderItemInfo,
+  Image,
+  ImageBackground,
+  StyleSheet,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TodoItem } from '../../types/common';
 import Todo from './Todo';
@@ -42,15 +50,34 @@ const Main: React.FC<Props> = (props) => {
   return (
     <>
       <AddTodo onAdd={onAdd} />
-      <FlatList<TodoItem>
-        contentContainerStyle={{ paddingBottom: insets.bottom }}
-        data={todos}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={keyExtractor}
-      />
+      {todos.length ? (
+        <FlatList<TodoItem>
+          contentContainerStyle={{ paddingBottom: insets.bottom }}
+          data={todos}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={keyExtractor}
+        />
+      ) : (
+        <Image
+          resizeMode="contain"
+          style={styles.image}
+          source={require('../../../assets/no-items.png')}
+        />
+      )}
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  imageWrapper: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  image: {
+    width: '100%',
+    height: 100,
+  },
+});
 
 export default Main;
