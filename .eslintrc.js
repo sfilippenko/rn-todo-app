@@ -64,6 +64,7 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    'react/jsx-props-no-spreading': 0,
     'no-shadow': 0,
     'global-require': 0,
     'import/prefer-default-export': 1,

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { TodoItem } from '../../../types/common';
+import AppText from '../../../components/AppText';
 
 interface Props {
   data: TodoItem;
@@ -61,7 +62,7 @@ const Todo: React.FC<Props> = (props) => {
       onLongPress={handleLongPress}
       style={[styles.todo, isLast && styles.todoLast, loading && styles.todoLoading]}
       disabled={loading}>
-      <Text>{title}</Text>
+      <AppText>{title}</AppText>
     </TouchableOpacity>
   );
 };

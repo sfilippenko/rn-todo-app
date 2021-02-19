@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, Alert } from 'react-native';
+import { View, Button, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import { TodoItem } from '../../types/common';
 import { Colors } from '../../consts/theme';
 import Card from '../../components/Card';
 import EditModal from './EditModal';
+import AppText from '../../components/AppText';
 
 interface Props {
   onTodoOpen: (value: number | null) => void;
@@ -71,7 +72,7 @@ const Todo: React.FC<Props> = (props) => {
   return (
     <View>
       <Card style={styles.card}>
-        <Text style={styles.title}>{title}</Text>
+        <AppText style={styles.title}>{title}</AppText>
         <Button disabled={loading} title="Редактировать" onPress={openModal} />
       </Card>
       <View style={styles.buttons}>
