@@ -1,17 +1,10 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  View,
-  FlatList,
-  ListRenderItemInfo,
-  Image,
-  ImageBackground,
-  StyleSheet,
-} from 'react-native';
+import { FlatList, ListRenderItemInfo, Image, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TodoItem } from '../../types/common';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
+import Loader from '../../components/Loader';
 
 interface Props {
   loading: boolean;
@@ -44,7 +37,7 @@ const Main: React.FC<Props> = (props) => {
   }, []);
 
   if (loading) {
-    return <ActivityIndicator size="large" />;
+    return <Loader />;
   }
 
   return (
