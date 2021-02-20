@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, useWindowDimensions } from 'react-native';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { TodoItem } from '../../types/common';
@@ -20,6 +20,8 @@ const Todo: React.FC<Props> = (props) => {
   const { onTodoOpen, todo, onDelete, onTodoChange } = props;
   const [loading, setLoading] = React.useState(false);
   const [modal, setModal] = React.useState(false);
+
+  const dimensions = useWindowDimensions();
 
   const handleBackPress = React.useCallback(() => {
     onTodoOpen(null);
@@ -98,14 +100,16 @@ const Todo: React.FC<Props> = (props) => {
   );
 };
 
+const buttonsGap = 10;
+
 const styles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
-    marginHorizontal: -10,
+    marginHorizontal: -buttonsGap,
   },
   button: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: buttonsGap,
   },
   title: {
     fontSize: 20,

@@ -44,7 +44,11 @@ const EditModal: React.FC<Props> = (props) => {
   }, [onTodoChange, todo, onClose, id, trimmedValue]);
 
   return (
-    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+    <Modal
+      supportedOrientations={['landscape', 'portrait']}
+      visible={visible}
+      animationType="slide"
+      onRequestClose={onClose}>
       <View style={styles.wrapper}>
         <TextInput style={styles.input} value={value} onChangeText={setValue} editable={!loading} />
         <View style={styles.buttons}>

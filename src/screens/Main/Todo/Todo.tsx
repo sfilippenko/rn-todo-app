@@ -7,7 +7,6 @@ import AppText from '../../../components/AppText';
 
 interface Props {
   data: TodoItem;
-  isLast?: boolean;
   onDelete: (id: number) => void;
   onTodoOpen: (value: number | null) => void;
 }
@@ -17,7 +16,7 @@ const activeOpacity = 0.3;
 const Todo: React.FC<Props> = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [loading, setLoading] = React.useState(false);
-  const { data, isLast, onDelete, onTodoOpen } = props;
+  const { data, onDelete, onTodoOpen } = props;
   const { title, id } = data;
 
   const handleDelete = React.useCallback(async () => {
@@ -60,7 +59,7 @@ const Todo: React.FC<Props> = (props) => {
       activeOpacity={activeOpacity}
       onPress={handlePress}
       onLongPress={handleLongPress}
-      style={[styles.todo, isLast && styles.todoLast, loading && styles.todoLoading]}
+      style={[styles.todo, loading && styles.todoLoading]}
       disabled={loading}>
       <AppText>{title}</AppText>
     </TouchableOpacity>
@@ -75,10 +74,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
     borderRadius: 4,
-    marginBottom: 8,
-  },
-  todoLast: {
-    marginBottom: 0,
+    flex: 1,
   },
   todoLoading: {
     opacity: activeOpacity,

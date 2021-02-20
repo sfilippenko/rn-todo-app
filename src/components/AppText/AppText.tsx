@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, TextProps, TextStyle } from 'react-native';
-import { useCalculatedStyles } from '../../hooks/useCalculatedStyles';
+import useCalculatedStyles from '../../hooks/useCalculatedStyles';
 import { isIos } from '../../consts/app';
 
 const AppText: React.FC<TextProps> = (props) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import AppText from '../AppText';
 import { Colors } from '../../consts/theme';
-import { useCalculatedStyles } from '../../hooks/useCalculatedStyles';
+import useCalculatedStyles from '../../hooks/useCalculatedStyles';
 
 interface Props extends TouchableOpacityProps {
   color?: Colors;
