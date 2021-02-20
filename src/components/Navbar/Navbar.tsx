@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.Main,
   },
   text: {
-    color: '#fff',
+    color: Colors.White,
     fontSize: 20,
   },
 });

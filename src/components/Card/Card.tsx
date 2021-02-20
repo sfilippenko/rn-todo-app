@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { Colors } from '../../consts/theme';
 
 interface Props {
   style?: StyleProp<ViewStyle>;
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
-    shadowColor: '#000',
+    shadowColor: Colors.Black,
     shadowRadius: 2,
     shadowOpacity: 0.3,
     shadowOffset: {
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
       height: 2,
     },
     elevation: 8,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.White,
     borderRadius: 10,
   },
 });

@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Modal, TextInput, Button, Alert } from 'react-native';
+import { View, StyleSheet, Modal, TextInput, Alert } from 'react-native';
 import axios from 'axios';
 import { Colors } from '../../../consts/theme';
 import { TodoItem } from '../../../types/common';
+import AppButton from '../../../components/AppButton';
 
 interface Props {
   visible: boolean;
@@ -48,10 +49,14 @@ const EditModal: React.FC<Props> = (props) => {
         <TextInput style={styles.input} value={value} onChangeText={setValue} editable={!loading} />
         <View style={styles.buttons}>
           <View style={styles.button}>
-            <Button title="Отменить" onPress={onClose} color={Colors.Danger} disabled={loading} />
+            <AppButton onPress={onClose} color={Colors.Danger} disabled={loading}>
+              Отменить
+            </AppButton>
           </View>
           <View style={styles.button}>
-            <Button title="Сохранить" onPress={handleSave} disabled={loading} />
+            <AppButton onPress={handleSave} disabled={loading}>
+              Сохранить
+            </AppButton>
           </View>
         </View>
       </View>

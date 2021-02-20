@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { View, StyleSheet, TextInput, Alert } from 'react-native';
 import axios from 'axios';
+import { AntDesign } from '@expo/vector-icons';
 import { TodoItem } from '../../../types/common';
-import { Colors } from '../../../consts/theme';
+import { Colors, IconSize } from '../../../consts/theme';
+import AppButton from '../../../components/AppButton';
 
 interface Props {
   onAdd: (todo: TodoItem) => void;
@@ -47,7 +49,9 @@ const AddTodo: React.FC<Props> = (props) => {
         value={title}
         placeholder="Введите название задания..."
       />
-      <Button title="Добавить" onPress={handlePress} disabled={loading} />
+      <AppButton onPress={handlePress} disabled={loading}>
+        <AntDesign name="pluscircleo" size={IconSize.MD} />
+      </AppButton>
     </View>
   );
 };

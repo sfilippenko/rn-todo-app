@@ -16,7 +16,7 @@ const Root: React.FC = () => {
       setLoading(true);
       await new Promise((res) => setTimeout(res, 500));
       try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=1');
+        const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=2');
         setTodos(response.data);
       } finally {
         setLoading(false);

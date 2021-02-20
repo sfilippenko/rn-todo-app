@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Button, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { TodoItem } from '../../types/common';
-import { Colors } from '../../consts/theme';
+import { Colors, IconSize } from '../../consts/theme';
 import Card from '../../components/Card';
 import EditModal from './EditModal';
 import AppText from '../../components/AppText';
+import AppButton from '../../components/AppButton';
 
 interface Props {
   onTodoOpen: (value: number | null) => void;
@@ -73,19 +75,20 @@ const Todo: React.FC<Props> = (props) => {
     <View>
       <Card style={styles.card}>
         <AppText style={styles.title}>{title}</AppText>
-        <Button disabled={loading} title="Редактировать" onPress={openModal} />
+        <AppButton disabled={loading} onPress={openModal}>
+          <FontAwesome name="edit" size={IconSize.MD} />
+        </AppButton>
       </Card>
       <View style={styles.buttons}>
         <View style={styles.button}>
-          <Button disabled={loading} onPress={handleBackPress} title="Назад" color={Colors.Gray} />
+          <AppButton disabled={loading} onPress={handleBackPress} color={Colors.Gray}>
+            <AntDesign name="back" size={IconSize.MD} />
+          </AppButton>
         </View>
         <View style={styles.button}>
-          <Button
-            disabled={loading}
-            onPress={handleDeletePress}
-            title="Удалить"
-            color={Colors.Danger}
-          />
+          <AppButton disabled={loading} onPress={handleDeletePress} color={Colors.Danger}>
+            <FontAwesome name="remove" size={IconSize.MD} />
+          </AppButton>
         </View>
       </View>
       {modal && (
