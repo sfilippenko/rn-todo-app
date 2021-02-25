@@ -2,13 +2,15 @@ import { StyleSheet, View } from 'react-native';
 import React from 'react';
 import axios from 'axios';
 import NavBar from './components/Navbar';
-import { TodoItem } from './types/common';
 import Main from './screens/Main';
 import Todo from './screens/Todo';
+import { Colors } from './consts/theme';
+import { TodoContextDispatch, TodoContextState } from './context/todo/todoContext';
+import { setTodos } from './context/todo/actions';
 
 const Root: React.FC = () => {
-  const [todoId, setTodoId] = React.useState<number | null>(null);
-  const [todos, setTodos] = React.useState<TodoItem[]>([]);
+  const { todos, todoId } = React.useContext(TodoContextState);
+  const dispatch = React.useContext(TodoContextDispatch);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -16,57 +18,19 @@ const Root: React.FC = () => {
       setLoading(true);
       await new Promise((res) => setTimeout(res, 500));
       try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=40');
-        setTodos(response.data);
+        const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=20');
+        dispatch(setTodos(response.data));
       } finally {
         setLoading(false);
       }
     })();
-  }, []);
-
-  const handleAdd = React.useCallback((todo: TodoItem) => {
-    setTodos((prevTodos) => {
-      return [...prevTodos, { ...todo, id: todo.id + Date.now() }];
-    });
-  }, []);
-
-  const handleChange = React.useCallback((todo: TodoItem) => {
-    setTodos((prevTodos) => {
-      return prevTodos.map((item) => {
-        if (item.id === todo.id) {
-          return todo;
-        }
-        return item;
-      });
-    });
-  }, []);
-
-  const handleDelete = React.useCallback((id: number) => {
-    setTodos((prevTodos) => {
-      return prevTodos.filter((item) => item.id !== id);
-    });
-  }, []);
+  }, [dispatch]);
 
   const renderContent = () => {
     if (todoId !== null) {
-      return (
-        <Todo
-          onTodoChange={handleChange}
-          onDelete={handleDelete}
-          onTodoOpen={setTodoId}
-          todo={todos.find((item) => item.id === todoId)}
-        />
-      );
+      return <Todo todo={todos.find((item) => item.id === todoId)} />;
     }
-    return (
-      <Main
-        onTodoOpen={setTodoId}
-        onAdd={handleAdd}
-        onDelete={handleDelete}
-        todos={todos}
-        loading={loading}
-      />
-    );
+    return <Main todos={todos} loading={loading} />;
   };
 
   return (
@@ -85,6 +49,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 20,
     flex: 1,
+    backgroundColor: Colors.White,
   },
 });
 

@@ -11,13 +11,10 @@ import ListGrid from '../../components/ListGrid';
 interface Props {
   loading: boolean;
   todos: TodoItem[];
-  onAdd: (todo: TodoItem) => void;
-  onDelete: (id: number) => void;
-  onTodoOpen: (value: number | null) => void;
 }
 
 const Main: React.FC<Props> = (props) => {
-  const { loading, todos, onDelete, onAdd, onTodoOpen } = props;
+  const { loading, todos } = props;
   const insets = useSafeAreaInsets();
   const isPortrait = usePortraitOrientation();
 
@@ -25,12 +22,9 @@ const Main: React.FC<Props> = (props) => {
     return isPortrait ? 1 : 2;
   }, [isPortrait]);
 
-  const renderItem = React.useCallback(
-    (info: ListRenderItemInfo<TodoItem>) => {
-      return <Todo onTodoOpen={onTodoOpen} data={info.item} onDelete={onDelete} />;
-    },
-    [onDelete, onTodoOpen],
-  );
+  const renderItem = React.useCallback((info: ListRenderItemInfo<TodoItem>) => {
+    return <Todo data={info.item} />;
+  }, []);
 
   const keyExtractor = React.useCallback((item: TodoItem) => {
     return String(item.id);
@@ -42,7 +36,7 @@ const Main: React.FC<Props> = (props) => {
 
   return (
     <>
-      <AddTodo onAdd={onAdd} />
+      <AddTodo />
       {todos.length ? (
         <ListGrid<TodoItem>
           gap={8}

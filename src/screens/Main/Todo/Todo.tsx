@@ -4,11 +4,11 @@ import axios from 'axios';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { TodoItem } from '../../../types/common';
 import AppText from '../../../components/AppText';
+import { TodoContextDispatch } from '../../../context/todo/todoContext';
+import { deleteTodo, setTodoId } from '../../../context/todo/actions';
 
 interface Props {
   data: TodoItem;
-  onDelete: (id: number) => void;
-  onTodoOpen: (value: number | null) => void;
 }
 
 const activeOpacity = 0.3;
@@ -16,7 +16,8 @@ const activeOpacity = 0.3;
 const Todo: React.FC<Props> = (props) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [loading, setLoading] = React.useState(false);
-  const { data, onDelete, onTodoOpen } = props;
+  const dispatch = React.useContext(TodoContextDispatch);
+  const { data } = props;
   const { title, id } = data;
 
   const handleDelete = React.useCallback(async () => {
@@ -24,11 +25,11 @@ const Todo: React.FC<Props> = (props) => {
     await new Promise((res) => setTimeout(res, 500));
     try {
       await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`);
-      onDelete(id);
+      dispatch(deleteTodo(id));
     } catch (e) {
       setLoading(false);
     }
-  }, [id, onDelete]);
+  }, [dispatch, id]);
 
   const handleLongPress = React.useCallback(() => {
     showActionSheetWithOptions(
@@ -51,8 +52,8 @@ const Todo: React.FC<Props> = (props) => {
   }, [handleDelete, showActionSheetWithOptions]);
 
   const handlePress = React.useCallback(() => {
-    onTodoOpen(id);
-  }, [id, onTodoOpen]);
+    dispatch(setTodoId(id));
+  }, [id, dispatch]);
 
   return (
     <TouchableOpacity

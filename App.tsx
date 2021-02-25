@@ -3,13 +3,16 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import Root from './src/Root';
+import TodoState from './src/context/todo/TodoState';
 
 const App: React.FC = () => {
   return (
     <ActionSheetProvider>
       <SafeAreaProvider>
         <StatusBar style="auto" />
-        <Root />
+        <TodoState>
+          <Root />
+        </TodoState>
       </SafeAreaProvider>
     </ActionSheetProvider>
   );

@@ -1,22 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, Modal, TextInput, Alert } from 'react-native';
 import axios from 'axios';
 import { Colors } from '../../../consts/theme';
 import { TodoItem } from '../../../types/common';
 import AppButton from '../../../components/AppButton';
+import { TodoContextDispatch } from '../../../context/todo/todoContext';
+import { changeTodo } from '../../../context/todo/actions';
 
 interface Props {
   visible: boolean;
   onClose: () => void;
   todo: TodoItem;
-  onTodoChange: (todo: TodoItem) => void;
 }
 
 const EditModal: React.FC<Props> = (props) => {
-  const { visible, onClose, todo, onTodoChange } = props;
+  const { visible, onClose, todo } = props;
   const [loading, setLoading] = React.useState(false);
   const { title, id } = todo;
   const [value, setValue] = React.useState(title);
+  const dispatch = useContext(TodoContextDispatch);
 
   const trimmedValue = React.useMemo(() => {
     return value.trim();
@@ -32,16 +34,18 @@ const EditModal: React.FC<Props> = (props) => {
       await axios.put(`https://jsonplaceholder.typicode.com/todos/${id}`, {
         title: trimmedValue,
       });
-      onTodoChange({
-        ...todo,
-        title: trimmedValue,
-      });
+      dispatch(
+        changeTodo({
+          ...todo,
+          title: trimmedValue,
+        }),
+      );
       onClose();
     } catch (e) {
       Alert.alert(e.message);
       setLoading(false);
     }
-  }, [onTodoChange, todo, onClose, id, trimmedValue]);
+  }, [dispatch, todo, onClose, id, trimmedValue]);
 
   return (
     <Modal

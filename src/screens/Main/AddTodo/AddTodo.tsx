@@ -1,19 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, TextInput, Alert } from 'react-native';
 import axios from 'axios';
 import { AntDesign } from '@expo/vector-icons';
-import { TodoItem } from '../../../types/common';
 import { Colors, IconSize } from '../../../consts/theme';
 import AppButton from '../../../components/AppButton';
+import { TodoContextDispatch } from '../../../context/todo/todoContext';
+import { addTodo } from '../../../context/todo/actions';
 
-interface Props {
-  onAdd: (todo: TodoItem) => void;
-}
-
-const AddTodo: React.FC<Props> = (props) => {
-  const { onAdd } = props;
+const AddTodo: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState('');
+  const dispatch = useContext(TodoContextDispatch);
 
   const trimmedTitle = React.useMemo(() => {
     return title.trim();
@@ -29,14 +26,14 @@ const AddTodo: React.FC<Props> = (props) => {
       const response = await axios.post('https://jsonplaceholder.typicode.com/todos', {
         title: trimmedTitle,
       });
-      onAdd(response.data);
+      dispatch(addTodo(response.data));
       setTitle('');
     } catch (e) {
       Alert.alert(e.message);
     } finally {
       setLoading(false);
     }
-  }, [onAdd, trimmedTitle]);
+  }, [dispatch, trimmedTitle]);
 
   return (
     <View style={styles.block}>

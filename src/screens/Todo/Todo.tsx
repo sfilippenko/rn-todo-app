@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, Alert, useWindowDimensions } from 'react-native';
+import React, { useContext } from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { TodoItem } from '../../types/common';
@@ -8,24 +8,22 @@ import Card from '../../components/Card';
 import EditModal from './EditModal';
 import AppText from '../../components/AppText';
 import AppButton from '../../components/AppButton';
+import { TodoContextDispatch } from '../../context/todo/todoContext';
+import { deleteTodo, setTodoId } from '../../context/todo/actions';
 
 interface Props {
-  onTodoOpen: (value: number | null) => void;
   todo?: TodoItem;
-  onDelete: (id: number) => void;
-  onTodoChange: (todo: TodoItem) => void;
 }
 
 const Todo: React.FC<Props> = (props) => {
-  const { onTodoOpen, todo, onDelete, onTodoChange } = props;
+  const { todo } = props;
   const [loading, setLoading] = React.useState(false);
   const [modal, setModal] = React.useState(false);
-
-  const dimensions = useWindowDimensions();
+  const dispatch = useContext(TodoContextDispatch);
 
   const handleBackPress = React.useCallback(() => {
-    onTodoOpen(null);
-  }, [onTodoOpen]);
+    dispatch(setTodoId(null));
+  }, [dispatch]);
 
   const handleDelete = React.useCallback(async () => {
     if (!todo) {
@@ -35,12 +33,12 @@ const Todo: React.FC<Props> = (props) => {
     await new Promise((res) => setTimeout(res, 500));
     try {
       await axios.delete(`https://jsonplaceholder.typicode.com/todos/${todo.id}`);
-      onDelete(todo.id);
+      dispatch(deleteTodo(todo.id));
       handleBackPress();
     } catch (e) {
       setLoading(false);
     }
-  }, [handleBackPress, todo, onDelete]);
+  }, [handleBackPress, todo, dispatch]);
 
   const handleDeletePress = React.useCallback(() => {
     if (!todo) {
@@ -93,9 +91,7 @@ const Todo: React.FC<Props> = (props) => {
           </AppButton>
         </View>
       </View>
-      {modal && (
-        <EditModal visible={modal} onClose={closeModal} todo={todo} onTodoChange={onTodoChange} />
-      )}
+      {modal && <EditModal visible={modal} onClose={closeModal} todo={todo} />}
     </View>
   );
 };
