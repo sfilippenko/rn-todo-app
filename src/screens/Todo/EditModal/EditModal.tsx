@@ -31,9 +31,12 @@ const EditModal: React.FC<Props> = (props) => {
       if (!trimmedValue) {
         throw new Error('Название дела не может быть пустым');
       }
-      await axios.put(`https://jsonplaceholder.typicode.com/todos/${id}`, {
-        title: trimmedValue,
-      });
+      await axios.put(
+        `https://rn-todo-app-f4c5d-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`,
+        {
+          title: trimmedValue,
+        },
+      );
       dispatch(
         changeTodo({
           ...todo,

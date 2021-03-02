@@ -24,7 +24,9 @@ const Todo: React.FC<Props> = (props) => {
     setLoading(true);
     await new Promise((res) => setTimeout(res, 500));
     try {
-      await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`);
+      await axios.delete(
+        `https://rn-todo-app-f4c5d-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`,
+      );
       dispatch(deleteTodo(id));
     } catch (e) {
       setLoading(false);

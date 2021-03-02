@@ -22,7 +22,7 @@ const Todo: React.FC<Props> = (props) => {
   const dispatch = useContext(TodoContextDispatch);
 
   const handleBackPress = React.useCallback(() => {
-    dispatch(setTodoId(null));
+    dispatch(setTodoId(''));
   }, [dispatch]);
 
   const handleDelete = React.useCallback(async () => {
@@ -32,7 +32,9 @@ const Todo: React.FC<Props> = (props) => {
     setLoading(true);
     await new Promise((res) => setTimeout(res, 500));
     try {
-      await axios.delete(`https://jsonplaceholder.typicode.com/todos/${todo.id}`);
+      await axios.delete(
+        `https://rn-todo-app-f4c5d-default-rtdb.europe-west1.firebasedatabase.app/todos/${todo.id}.json`,
+      );
       dispatch(deleteTodo(todo.id));
       handleBackPress();
     } catch (e) {

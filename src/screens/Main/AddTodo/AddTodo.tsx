@@ -23,10 +23,13 @@ const AddTodo: React.FC = () => {
       if (!trimmedTitle) {
         throw new Error('Название дела не может быть пустым');
       }
-      const response = await axios.post('https://jsonplaceholder.typicode.com/todos', {
-        title: trimmedTitle,
-      });
-      dispatch(addTodo(response.data));
+      const response = await axios.post(
+        'https://rn-todo-app-f4c5d-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
+        {
+          title: trimmedTitle,
+        },
+      );
+      dispatch(addTodo({ title: trimmedTitle, id: response.data.name }));
       setTitle('');
     } catch (e) {
       Alert.alert(e.message);
