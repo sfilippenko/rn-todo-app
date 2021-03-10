@@ -2,10 +2,12 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useNavigation } from '@react-navigation/native';
 import { TodoItem } from '../../../types/common';
 import AppText from '../../../components/AppText';
 import { TodoContextDispatch } from '../../../context/todo/todoContext';
-import { deleteTodo, setTodoId } from '../../../context/todo/actions';
+import { deleteTodo } from '../../../context/todo/actions';
+import { Routes } from '../../../types/navigation';
 
 interface Props {
   data: TodoItem;
@@ -14,6 +16,7 @@ interface Props {
 const activeOpacity = 0.3;
 
 const Todo: React.FC<Props> = (props) => {
+  const navigation = useNavigation();
   const { showActionSheetWithOptions } = useActionSheet();
   const [loading, setLoading] = React.useState(false);
   const dispatch = React.useContext(TodoContextDispatch);
@@ -54,8 +57,8 @@ const Todo: React.FC<Props> = (props) => {
   }, [handleDelete, showActionSheetWithOptions]);
 
   const handlePress = React.useCallback(() => {
-    dispatch(setTodoId(id));
-  }, [id, dispatch]);
+    navigation.navigate(Routes.Todo, { id });
+  }, [id, navigation]);
 
   return (
     <TouchableOpacity

@@ -3,12 +3,10 @@ import * as actions from './actions';
 
 export interface TodoReducerState {
   todos: TodoItem[];
-  todoId: string;
 }
 
 export const defaultState: TodoReducerState = {
   todos: [],
-  todoId: '',
 };
 
 export default (state: TodoReducerState, action: Action): TodoReducerState => {
@@ -52,15 +50,6 @@ export default (state: TodoReducerState, action: Action): TodoReducerState => {
       return {
         ...state,
         todos: [...state.todos, payload],
-      };
-    },
-    [actions.setTodoId.toString()]: (
-      state: TodoReducerState,
-      { payload }: ReturnType<typeof actions.setTodoId>,
-    ) => {
-      return {
-        ...state,
-        todoId: payload,
       };
     },
   }[action.type](state, action);

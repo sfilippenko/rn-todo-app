@@ -2,28 +2,29 @@ import React, { useContext } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
-import { TodoItem } from '../../types/common';
+import { StackScreenProps } from '@react-navigation/stack';
 import { Colors, IconSize } from '../../consts/theme';
 import Card from '../../components/Card';
 import EditModal from './EditModal';
 import AppText from '../../components/AppText';
 import AppButton from '../../components/AppButton';
-import { TodoContextDispatch } from '../../context/todo/todoContext';
-import { deleteTodo, setTodoId } from '../../context/todo/actions';
+import { TodoContextDispatch, TodoContextState } from '../../context/todo/todoContext';
+import { deleteTodo } from '../../context/todo/actions';
 
-interface Props {
-  todo?: TodoItem;
-}
-
-const Todo: React.FC<Props> = (props) => {
-  const { todo } = props;
+const Todo: React.FC<StackScreenProps<any>> = (props) => {
+  const { navigation, route } = props;
   const [loading, setLoading] = React.useState(false);
   const [modal, setModal] = React.useState(false);
   const dispatch = useContext(TodoContextDispatch);
+  const { todos } = useContext(TodoContextState);
+
+  const todo = React.useMemo(() => {
+    return todos.find((todo) => todo.id === route.params?.id);
+  }, [route, todos]);
 
   const handleBackPress = React.useCallback(() => {
-    dispatch(setTodoId(''));
-  }, [dispatch]);
+    navigation.goBack();
+  }, [navigation]);
 
   const handleDelete = React.useCallback(async () => {
     if (!todo) {
