@@ -1,16 +1,13 @@
-import React, { useContext } from 'react';
-import { View, StyleSheet, TextInput, Alert } from 'react-native';
-import axios from 'axios';
+import React from 'react';
+import { View, StyleSheet, TextInput } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Colors, IconSize } from '../../../consts/theme';
 import AppButton from '../../../components/AppButton';
-import { TodoContextDispatch } from '../../../context/todo/todoContext';
-import { addTodo } from '../../../context/todo/actions';
+import { addTodoAsync } from '../../../store/async';
 
 const AddTodo: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
   const [title, setTitle] = React.useState('');
-  const dispatch = useContext(TodoContextDispatch);
 
   const trimmedTitle = React.useMemo(() => {
     return title.trim();
@@ -20,23 +17,12 @@ const AddTodo: React.FC = () => {
     setLoading(true);
     await new Promise((res) => setTimeout(res, 500));
     try {
-      if (!trimmedTitle) {
-        throw new Error('Название дела не может быть пустым');
-      }
-      const response = await axios.post(
-        'https://rn-todo-app-f4c5d-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
-        {
-          title: trimmedTitle,
-        },
-      );
-      dispatch(addTodo({ title: trimmedTitle, id: response.data.name }));
+      await addTodoAsync(trimmedTitle);
       setTitle('');
-    } catch (e) {
-      Alert.alert(e.message);
     } finally {
       setLoading(false);
     }
-  }, [dispatch, trimmedTitle]);
+  }, [trimmedTitle]);
 
   return (
     <View style={styles.block}>

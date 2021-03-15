@@ -1,53 +1,45 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
+import { observer } from 'mobx-react-lite';
 import { Colors, IconSize } from '../../consts/theme';
 import Card from '../../components/Card';
 import EditModal from './EditModal';
 import AppText from '../../components/AppText';
 import AppButton from '../../components/AppButton';
-import { TodoContextDispatch, TodoContextState } from '../../context/todo/todoContext';
-import { deleteTodo } from '../../context/todo/actions';
+import todo from '../../store/todo';
+import { deleteTodoAsync } from '../../store/async';
 
-const Todo: React.FC<StackScreenProps<any>> = (props) => {
+const Todo: React.FC<StackScreenProps<any>> = observer((props) => {
   const { navigation, route } = props;
   const [loading, setLoading] = React.useState(false);
   const [modal, setModal] = React.useState(false);
-  const dispatch = useContext(TodoContextDispatch);
-  const { todos } = useContext(TodoContextState);
 
-  const todo = React.useMemo(() => {
-    return todos.find((todo) => todo.id === route.params?.id);
-  }, [route, todos]);
+  const todoItem = todo.selectTodo(route.params?.id).get();
 
   const handleBackPress = React.useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
   const handleDelete = React.useCallback(async () => {
-    if (!todo) {
+    if (!todoItem) {
       return;
     }
     setLoading(true);
-    await new Promise((res) => setTimeout(res, 500));
     try {
-      await axios.delete(
-        `https://rn-todo-app-f4c5d-default-rtdb.europe-west1.firebasedatabase.app/todos/${todo.id}.json`,
-      );
-      dispatch(deleteTodo(todo.id));
+      await deleteTodoAsync(todoItem.id);
       handleBackPress();
     } catch (e) {
       setLoading(false);
     }
-  }, [handleBackPress, todo, dispatch]);
+  }, [handleBackPress, todoItem]);
 
   const handleDeletePress = React.useCallback(() => {
-    if (!todo) {
+    if (!todoItem) {
       return;
     }
-    Alert.alert('Удалить задание', todo.title, [
+    Alert.alert('Удалить задание', todoItem.title, [
       {
         text: 'Удалить',
         onPress: handleDelete,
@@ -58,7 +50,7 @@ const Todo: React.FC<StackScreenProps<any>> = (props) => {
         style: 'cancel',
       },
     ]);
-  }, [handleDelete, todo]);
+  }, [handleDelete, todoItem]);
 
   const openModal = React.useCallback(() => {
     setModal(true);
@@ -68,11 +60,11 @@ const Todo: React.FC<StackScreenProps<any>> = (props) => {
     setModal(false);
   }, []);
 
-  if (!todo) {
+  if (!todoItem) {
     return null;
   }
 
-  const { title } = todo;
+  const { title } = todoItem;
 
   return (
     <View>
@@ -94,10 +86,10 @@ const Todo: React.FC<StackScreenProps<any>> = (props) => {
           </AppButton>
         </View>
       </View>
-      {modal && <EditModal visible={modal} onClose={closeModal} todo={todo} />}
+      {modal && <EditModal visible={modal} onClose={closeModal} todo={todoItem} />}
     </View>
   );
-};
+});
 
 const buttonsGap = 10;
 

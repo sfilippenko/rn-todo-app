@@ -1,13 +1,11 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import axios from 'axios';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useNavigation } from '@react-navigation/native';
 import { TodoItem } from '../../../types/common';
 import AppText from '../../../components/AppText';
-import { TodoContextDispatch } from '../../../context/todo/todoContext';
-import { deleteTodo } from '../../../context/todo/actions';
 import { Routes } from '../../../types/navigation';
+import { deleteTodoAsync } from '../../../store/async';
 
 interface Props {
   data: TodoItem;
@@ -19,22 +17,17 @@ const Todo: React.FC<Props> = (props) => {
   const navigation = useNavigation();
   const { showActionSheetWithOptions } = useActionSheet();
   const [loading, setLoading] = React.useState(false);
-  const dispatch = React.useContext(TodoContextDispatch);
   const { data } = props;
   const { title, id } = data;
 
   const handleDelete = React.useCallback(async () => {
     setLoading(true);
-    await new Promise((res) => setTimeout(res, 500));
     try {
-      await axios.delete(
-        `https://rn-todo-app-f4c5d-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`,
-      );
-      dispatch(deleteTodo(id));
+      await deleteTodoAsync(id);
     } catch (e) {
       setLoading(false);
     }
-  }, [dispatch, id]);
+  }, [id]);
 
   const handleLongPress = React.useCallback(() => {
     showActionSheetWithOptions(

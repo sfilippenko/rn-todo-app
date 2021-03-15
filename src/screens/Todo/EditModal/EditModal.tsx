@@ -1,11 +1,9 @@
-import React, { useContext } from 'react';
-import { View, StyleSheet, Modal, TextInput, Alert } from 'react-native';
-import axios from 'axios';
+import React from 'react';
+import { View, StyleSheet, Modal, TextInput } from 'react-native';
 import { Colors } from '../../../consts/theme';
 import { TodoItem } from '../../../types/common';
 import AppButton from '../../../components/AppButton';
-import { TodoContextDispatch } from '../../../context/todo/todoContext';
-import { changeTodo } from '../../../context/todo/actions';
+import { editTodoAsync } from '../../../store/async';
 
 interface Props {
   visible: boolean;
@@ -16,9 +14,8 @@ interface Props {
 const EditModal: React.FC<Props> = (props) => {
   const { visible, onClose, todo } = props;
   const [loading, setLoading] = React.useState(false);
-  const { title, id } = todo;
+  const { title } = todo;
   const [value, setValue] = React.useState(title);
-  const dispatch = useContext(TodoContextDispatch);
 
   const trimmedValue = React.useMemo(() => {
     return value.trim();
@@ -28,27 +25,15 @@ const EditModal: React.FC<Props> = (props) => {
     setLoading(true);
     await new Promise((res) => setTimeout(res, 500));
     try {
-      if (!trimmedValue) {
-        throw new Error('Название дела не может быть пустым');
-      }
-      await axios.put(
-        `https://rn-todo-app-f4c5d-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`,
-        {
-          title: trimmedValue,
-        },
-      );
-      dispatch(
-        changeTodo({
-          ...todo,
-          title: trimmedValue,
-        }),
-      );
+      await editTodoAsync({
+        ...todo,
+        title: trimmedValue,
+      });
       onClose();
     } catch (e) {
-      Alert.alert(e.message);
       setLoading(false);
     }
-  }, [dispatch, todo, onClose, id, trimmedValue]);
+  }, [todo, onClose, trimmedValue]);
 
   return (
     <Modal

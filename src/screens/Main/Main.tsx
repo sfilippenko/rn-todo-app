@@ -1,48 +1,31 @@
 import React from 'react';
-import { ListRenderItemInfo, Image, StyleSheet, Alert, View } from 'react-native';
+import { ListRenderItemInfo, Image, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import axios from 'axios';
+import { observer } from 'mobx-react-lite';
 import { TodoItem } from '../../types/common';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
 import Loader from '../../components/Loader';
 import usePortraitOrientation from '../../hooks/usePortraitOrientation';
 import ListGrid from '../../components/ListGrid';
-import { setTodos } from '../../context/todo/actions';
-import { TodoContextDispatch, TodoContextState } from '../../context/todo/todoContext';
+import todo from '../../store/todo';
+import { getTodosAsync } from '../../store/async';
 
-const Main: React.FC = () => {
-  const { todos } = React.useContext(TodoContextState);
+const Main: React.FC = observer(() => {
   const [loading, setLoading] = React.useState(false);
   const insets = useSafeAreaInsets();
-  const dispatch = React.useContext(TodoContextDispatch);
   const isPortrait = usePortraitOrientation();
 
   React.useEffect(() => {
     (async () => {
       setLoading(true);
-      await new Promise((res) => setTimeout(res, 500));
       try {
-        const response = await axios.get(
-          'https://rn-todo-app-f4c5d-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
-        );
-        const data = response.data || {};
-
-        dispatch(
-          setTodos(
-            Object.keys(data).map((id) => ({
-              id,
-              title: data[id].title,
-            })),
-          ),
-        );
-      } catch (e) {
-        Alert.alert(e.message);
+        await getTodosAsync();
       } finally {
         setLoading(false);
       }
     })();
-  }, [dispatch]);
+  }, []);
 
   const numColumns = React.useMemo(() => {
     return isPortrait ? 1 : 2;
@@ -63,12 +46,12 @@ const Main: React.FC = () => {
   return (
     <View style={styles.container}>
       <AddTodo />
-      {todos.length ? (
+      {todo.todos.length ? (
         <ListGrid<TodoItem>
           gap={8}
           numColumns={numColumns}
           contentContainerStyle={{ paddingBottom: insets.bottom }}
-          data={todos}
+          data={todo.todos}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           keyExtractor={keyExtractor}
@@ -82,7 +65,7 @@ const Main: React.FC = () => {
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
