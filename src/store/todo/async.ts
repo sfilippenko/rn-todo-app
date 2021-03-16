@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
 import todo from './todo';
-import { TodoItem } from '../types/common';
+import { TodoItem } from '../../types/common';
 
 export const getTodosAsync = async () => {
   try {

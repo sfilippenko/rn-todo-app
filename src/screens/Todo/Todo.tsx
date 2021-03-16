@@ -8,8 +8,8 @@ import Card from '../../components/Card';
 import EditModal from './EditModal';
 import AppText from '../../components/AppText';
 import AppButton from '../../components/AppButton';
-import todo from '../../store/todo';
-import { deleteTodoAsync } from '../../store/async';
+import todo from '../../store/todo/todo';
+import { deleteTodoAsync } from '../../store/todo/async';
 
 const Todo: React.FC<StackScreenProps<any>> = observer((props) => {
   const { navigation, route } = props;

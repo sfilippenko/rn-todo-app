@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { TodoItem } from '../../../types/common';
 import AppText from '../../../components/AppText';
 import { Routes } from '../../../types/navigation';
-import { deleteTodoAsync } from '../../../store/async';
+import { deleteTodoAsync } from '../../../store/todo/async';
 
 interface Props {
   data: TodoItem;

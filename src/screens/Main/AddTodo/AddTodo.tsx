@@ -3,7 +3,7 @@ import { View, StyleSheet, TextInput } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Colors, IconSize } from '../../../consts/theme';
 import AppButton from '../../../components/AppButton';
-import { addTodoAsync } from '../../../store/async';
+import { addTodoAsync } from '../../../store/todo/async';
 
 const AddTodo: React.FC = () => {
   const [loading, setLoading] = React.useState(false);

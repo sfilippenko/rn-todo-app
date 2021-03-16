@@ -8,8 +8,8 @@ import AddTodo from './AddTodo';
 import Loader from '../../components/Loader';
 import usePortraitOrientation from '../../hooks/usePortraitOrientation';
 import ListGrid from '../../components/ListGrid';
-import todo from '../../store/todo';
-import { getTodosAsync } from '../../store/async';
+import todo from '../../store/todo/todo';
+import { getTodosAsync } from '../../store/todo/async';
 
 const Main: React.FC = observer(() => {
   const [loading, setLoading] = React.useState(false);

@@ -1,5 +1,5 @@
 import { computed, makeAutoObservable } from 'mobx';
-import { TodoItem } from '../types/common';
+import { TodoItem } from '../../types/common';
 
 class Todo {
   public todos: TodoItem[] = [];

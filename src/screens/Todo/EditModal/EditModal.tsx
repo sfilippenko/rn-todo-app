@@ -3,7 +3,7 @@ import { View, StyleSheet, Modal, TextInput } from 'react-native';
 import { Colors } from '../../../consts/theme';
 import { TodoItem } from '../../../types/common';
 import AppButton from '../../../components/AppButton';
-import { editTodoAsync } from '../../../store/async';
+import { editTodoAsync } from '../../../store/todo/async';
 
 interface Props {
   visible: boolean;
