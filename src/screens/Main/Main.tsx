@@ -10,6 +10,7 @@ import usePortraitOrientation from '../../hooks/usePortraitOrientation';
 import ListGrid from '../../components/ListGrid';
 import todo from '../../store/todo/todo';
 import { getTodosAsync } from '../../store/todo/async';
+import { APP_PADDING_HORIZONTAL, APP_PADDING_TOP } from '../../consts/app';
 
 const Main: React.FC = observer(() => {
   const [loading, setLoading] = React.useState(false);
@@ -70,6 +71,8 @@ const Main: React.FC = observer(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: APP_PADDING_HORIZONTAL,
+    paddingTop: APP_PADDING_TOP,
   },
   imageWrapper: {
     alignItems: 'flex-start',

@@ -10,6 +10,7 @@ import AppText from '../../components/AppText';
 import AppButton from '../../components/AppButton';
 import todo from '../../store/todo/todo';
 import { deleteTodoAsync } from '../../store/todo/async';
+import { APP_PADDING_HORIZONTAL, APP_PADDING_TOP } from '../../consts/app';
 
 const Todo: React.FC<StackScreenProps<any>> = observer((props) => {
   const { navigation, route } = props;
@@ -67,7 +68,7 @@ const Todo: React.FC<StackScreenProps<any>> = observer((props) => {
   const { title } = todoItem;
 
   return (
-    <View>
+    <View style={styles.container}>
       <Card style={styles.card}>
         <AppText style={styles.title}>{title}</AppText>
         <AppButton disabled={loading} onPress={openModal}>
@@ -94,6 +95,11 @@ const Todo: React.FC<StackScreenProps<any>> = observer((props) => {
 const buttonsGap = 10;
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: APP_PADDING_HORIZONTAL,
+    paddingTop: APP_PADDING_TOP,
+    flex: 1,
+  },
   buttons: {
     flexDirection: 'row',
     marginHorizontal: -buttonsGap,
